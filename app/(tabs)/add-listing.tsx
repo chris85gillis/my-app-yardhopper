@@ -10,25 +10,44 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { Easing } from "react-native";
 
 const categories = [
-  { id: "1", name: "Decor/Art", subcategories: ["Paintings", "Sculptures", "Wall Art"] },
-  { id: "2", name: "Clothing", subcategories: ["Men", "Women", "Kids"] },
-  { id: "3", name: "Furniture", subcategories: ["Sofas", "Tables", "Chairs"] },
-  { id: "4", name: "Electronics", subcategories: ["Phones", "Laptops", "TVs"] },
-  { id: "5", name: "Books & Media", subcategories: ["Books", "Magazines", "DVDs"] },
-  { id: "6", name: "Hobbies", subcategories: ["Crafts", "Collectibles", "Games"] },
-  { id: "7", name: "Other", subcategories: [] },
+  { id: "1", name: "Decor & Art", subcategories: ["Paintings", "Sculptures", "Wall Art", "Pottery", "Mirrors", "Candles", "Clocks"] },
+  { id: "2", name: "Clothing", subcategories: ["Mens", "Womens", "Kids", "Winter", "Summer", "Outerwear", "Belts", "Sunglasses"] },
+  { id: "3", name: "Shoes & Accessories", subcategories: ["Jewelry", "Bags", "Mens", "Womens"] },
+  { id: "4", name: "Pet", subcategories: ["Cat", "Dog", "Bird", "Exotic", "Other"] },
+  { id: "5", name: "Tools/Parts", subcategories: ["Automotive", "Power Tools", "Lawn/Garden", "Trades", "Hand Tools"] },
+  { id: "6", name: "Kitchenware", subcategories: ["Cups/Glasses", "Crystal", "Silverware", "Dining", "Utensils", "Gadgets"] },
+  { id: "7", name: "Textiles", subcategories: ["Fabrics", "Bedding", "Towels", "Rugs"] },
+  { id: "8", name: "Furniture", subcategories: ["Seating", "Tables/Desks", "Storage", "Bedroom", "Outdoor", "Office", "Children's", "Nursery"] },
+  { id: "9", name: "Books & Media", subcategories: ["Picture Books", "Novels", "Reference Books", "CDs", "Television Series Sets", "VHS", "Cassettes", "Vinyl"] },
+  { id: "10", name: "Seasonal/Holiday", subcategories: ["Christmas", "Halloween", "Costumes", "Gift/Wrapping", "Misc Holiday", "Seasonal Decor"] },
+  { id: "11", name: "Appliances", subcategories: ["Large Appliances", "Kitchen Appliances", "Personal Care", "Outdoor", "Cleaning"] },
+  { id: "12", name: "Electronics", subcategories: ["TVs/Home Entertainment", "Gaming", "Computer/Accessories", "Personal Devices", "Music/Audio", "Photography"] },
+  { id: "13", name: "Hobbies", subcategories: ["Painting", "Yarn", "Sewing", "Woodworking", "Floral/Decorative", "Kids Crafts", "Musical Instruments"] },
+  { id: "14", name: "Sports/Outdoors", subcategories: ["Sport Accessories", "Camping Gear", "Bikes/Scooters", "Skating", "Sporting Gear", "Fishing"] },
+  { id: "15", name: "Kids", subcategories: ["Clothing", "Toys", "Nursery"] },
+  { id: "16", name: "Other", subcategories: [] },
 ];
 
 const icons = {
-  "Decor/Art": "palette",
+  "Decor & Art": "palette",
   Clothing: "tshirt-crew",
+  "Shoes & Accessories": "shoe-formal",
+  Pet: "paw",
+  "Tools/Parts": "tools",
+  Kitchenware: "silverware",
+  Textiles: "rug",
   Furniture: "sofa",
-  Electronics: "desktop-mac",
   "Books & Media": "book-open",
+  "Seasonal/Holiday": "calendar",
+  Appliances: "fridge",
+  Electronics: "desktop-mac",
   Hobbies: "puzzle",
+  "Sports/Outdoors": "basketball",
   Other: "dots-horizontal",
+  Kids: "baby",
 };
 
 export default function AddListingPage() {
@@ -46,22 +65,27 @@ export default function AddListingPage() {
 
   const toggleCategory = (id, subcategories) => {
     const isExpanded = expandedCategory === id;
-
+  
+    // Close the previously expanded category
     if (expandedCategory && expandedCategory !== id) {
       Animated.timing(dropdownAnimations.current[expandedCategory], {
         toValue: 0,
-        duration: 300,
+        duration: 400, // Slightly longer for smoothness
+        easing: Easing.inOut(Easing.ease), // Smooth easing
         useNativeDriver: false,
       }).start();
     }
-
+  
+    // Expand or collapse the current category
     setExpandedCategory(isExpanded ? null : id);
     Animated.timing(dropdownAnimations.current[id], {
       toValue: isExpanded ? 0 : 1,
-      duration: 300,
+      duration: 100, // Match the duration
+      easing: Easing.inOut(Easing.ease), // Smooth easing
       useNativeDriver: false,
     }).start();
-
+  
+    // Manage selected categories
     setSelectedCategories((prev) => {
       if (isExpanded && !subcategories.some((sub) => selectedSubcategories.includes(sub))) {
         return prev.filter((cat) => cat !== id);
@@ -214,6 +238,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 8,
+    color: '#159636',
   },
   subtitle: {
     fontSize: 16,
@@ -284,17 +309,17 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   continueButton: {
-    backgroundColor: "#4caf50",
-    padding: 16,
-    borderRadius: 25,
+    backgroundColor: "#159636",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 50,
     alignItems: "center",
-    width: "90%",
     alignSelf: "center",
-    marginTop: 16,
+    marginTop: 40,
   },
   continueText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
 });
